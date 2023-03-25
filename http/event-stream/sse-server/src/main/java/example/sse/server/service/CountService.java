@@ -14,14 +14,14 @@ public class CountService {
 
     public Future<?> count(final int size, final long speed, Consumer<Integer> consumer) {
 
-        log.info("start counting...size={}", size);
+        log.info("start counting...size={}, speed={}", size, speed);
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         return executor.submit(() -> {
             int offset = 0;
             while (offset++ < size) {
                 sleep(speed);
-                log.info("counting...now={}", offset);
+                log.info("counting...now offset={}", offset);
                 consumer.accept(offset);
             }
         });

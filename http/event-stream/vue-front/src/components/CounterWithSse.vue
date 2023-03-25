@@ -3,11 +3,9 @@
     <p class="counter__description">hi, i'm counter</p>
     <p class="counter__status">{{ status }}</p>
     <div class="counter__action">
-      <input type="text" v-model="countSize" placeholder="fill size..." />cnt
-      <input type="text" v-model="countSpeed" placeholder="fill speed..." />ms
-      <button class="counter__action--button" @click="startCount">
-        카운트
-      </button>
+      <input type="text" v-model="size" placeholder="fill size..." />cnt
+      <input type="text" v-model="speed" placeholder="fill speed..." />ms
+      <button class="counter__action--button" @click="startCount">시작</button>
     </div>
     <ul class="counter__messages">
       <li
@@ -30,8 +28,8 @@ export default {
       sseId: null,
       sseIndex: null,
       status: null,
-      countSize: 10,
-      countSpeed: 100,
+      size: 10,
+      speed: 100,
       messages: [],
     };
   },
@@ -72,9 +70,9 @@ export default {
       });
     },
     async requestCounting() {
-      const { sseId: id, countSize: size, countSpeed: speed } = this;
+      const { sseId, size, speed } = this;
       this.$axios
-        .post(`/api/counter/count?id=${id}&size=${size}&speed=${speed}`)
+        .post(`/api/counter/count?id=${sseId}&size=${size}&speed=${speed}`)
         .then((response) => {
           console.log("카운팅 요청완료...", response);
         });

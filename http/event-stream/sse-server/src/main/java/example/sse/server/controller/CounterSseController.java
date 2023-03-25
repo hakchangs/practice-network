@@ -29,19 +29,16 @@ public class CounterSseController {
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     SseEmitter add() {
 
+        //1. id 생성
         final String id = generateId();
 
+        //2. sse emitter 등록
         SseEmitter emitter = new SseEmitter();
         registry.register(id, emitter);
 
-        try {
-            emitter.send(SseEmitter.event()
-                    .id(id)
-                    .name("connect")
-                    .data("connected!"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        //3. 연결알림 전달
+        send(emitter, SseEmitter.event()
+                .id(id).name("connect").data("connected!"));
 
         return emitter;
     }
@@ -61,7 +58,7 @@ public class CounterSseController {
 
         //2. check done
         while (!future.isDone() && !future.isCancelled()) {
-            log.info("checking done...");
+            log.trace("checking done...");
         }
 
         //3. send close
