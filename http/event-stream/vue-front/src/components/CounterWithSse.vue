@@ -26,16 +26,12 @@ export default {
     return {
       sse: null,
       sseId: null,
-      sseIndex: null,
       status: null,
       size: 10,
       speed: 100,
       messages: [],
+      messageIndex: null,
     };
-  },
-  mounted() {
-    // this.setMockMessages();
-    // this.requestConnect();
   },
   methods: {
     async startCount() {
@@ -45,28 +41,27 @@ export default {
       if (this.sse != null) {
         this.sse.close();
       }
-      let sse = await new EventSource("/api/counter/connect");
-      this.sse = sse;
+      this.sse = await new EventSource("/api/counter/connect");
       this.status = "preparing...";
-      sse.addEventListener("connect", (event) => {
+      this.sse.addEventListener("connect", (event) => {
         console.log("connected...", event);
         const { data: receivedData, lastEventId: id } = event;
         this.sseId = id;
         this.status = receivedData;
-        this.sseIndex = this.messages.push({ id, reply: "" }) - 1;
+        this.messageIndex = this.messages.push({ id, reply: "" }) - 1;
         onOpen();
       });
-      sse.addEventListener("count", (event) => {
+      this.sse.addEventListener("count", (event) => {
         const { data: receivedData } = event;
-        const index = this.sseIndex;
+        const index = this.messageIndex;
         const { id, reply } = this.messages[index];
         const message = { id, reply: reply + receivedData };
         this.$set(this.messages, index, message);
       });
-      sse.addEventListener("close", (event) => {
+      this.sse.addEventListener("close", (event) => {
         const { data: receivedData } = event;
         console.log("close...data=", receivedData);
-        sse.close();
+        this.sse.close();
       });
     },
     async requestCounting() {
