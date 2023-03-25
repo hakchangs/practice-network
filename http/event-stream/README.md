@@ -19,8 +19,6 @@ Cache-Control: no-cache
 
 ### 서버
 #### 1. http 요청을 받으면, SSE 처리가능하도록 헤더를 내려주고 연결을 유지함
-- `Content-Type: text/event-stream`
-- `Transfer-Encoding: Chunked`
 ```http
 HTTP/1.1 200
 Content-Type: text/event-stream;charset=UTF-8
