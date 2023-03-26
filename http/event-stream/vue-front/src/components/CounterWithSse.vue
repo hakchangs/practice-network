@@ -2,11 +2,11 @@
   <div class="counter">
     <p class="counter__description">hi, i'm counter</p>
     <p class="counter__status">{{ status }}</p>
-    <div class="counter__action">
+    <form class="counter__query" @submit="startCount">
       <input type="text" v-model="size" placeholder="fill size..." />cnt
       <input type="text" v-model="speed" placeholder="fill speed..." />ms
-      <button class="counter__action--button" @click="startCount">시작</button>
-    </div>
+      <button class="counter__query--button" @click="startCount">시작</button>
+    </form>
     <ul class="counter__messages">
       <li
         class="counter__message"
@@ -26,7 +26,7 @@ export default {
     return {
       sse: null,
       sseId: null,
-      status: null,
+      status: "ready",
       size: 10,
       speed: 100,
       messages: [],
@@ -34,6 +34,10 @@ export default {
     };
   },
   methods: {
+    async onSubmit(event) {
+      event.preventDefault();
+      this.startCount();
+    },
     async startCount() {
       await this.requestConnect(this.requestCounting);
     },
@@ -79,7 +83,7 @@ export default {
 <style>
 .counter {
 }
-.counter__action {
+.counter__query {
   display: flex;
   justify-content: center;
   gap: 0.5rem;
@@ -89,6 +93,8 @@ export default {
   flex-direction: column;
   gap: 1rem;
   padding: 0;
+  max-width: 30rem;
+  margin: 3rem auto;
 }
 .counter__message {
   list-style: none;
