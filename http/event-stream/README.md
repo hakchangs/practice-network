@@ -28,7 +28,7 @@ Transfer-Encoding: chunked
 #### 2. 연결유지상태에서 지속적인 응답을 내려줌
 - 브라우저 > 개발도구 > 네트워크 > EventStream 을 통해 서버전송 데이터를 트레이싱할 수 있음.
 
-## vs Websocket
+## SSE vs Websocket
 
 |      |Socket|	Server-Sent-Event|
 |------|------|------------------|
