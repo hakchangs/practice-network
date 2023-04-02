@@ -29,6 +29,11 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/problem",
+    name: "problem",
+    component: () => import("../views/problem/SseProblemView.vue"),
+  },
 ];
 
 const router = new VueRouter({

@@ -1,4 +1,4 @@
-package example.sse.server.controller.sse.emitter.registry;
+package example.sse.server.adapter.http.sse.registry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,15 +8,15 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class CountRegistry extends SseEmitterMapRegistry<UUID> {
+public class CountSseRegistry extends SseEmitterMapRegistry<UUID> {
 
-    private final Logger log = LoggerFactory.getLogger(CountRegistry.class);
-    private final PubSubRegistry<UUID> registry;
+    private final Logger log = LoggerFactory.getLogger(CountSseRegistry.class);
+    private final PubSubSseRegistry<UUID> registry;
     private final AtomicLong counter;
 
-    public CountRegistry() {
+    public CountSseRegistry() {
         super();
-        this.registry = new PubSubRegistry<>();
+        this.registry = new PubSubSseRegistry<>();
         this.counter = new AtomicLong();
     }
 

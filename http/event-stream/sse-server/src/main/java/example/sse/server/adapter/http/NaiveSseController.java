@@ -1,6 +1,6 @@
-package example.sse.server.controller;
+package example.sse.server.adapter.http;
 
-import example.sse.server.controller.sse.emitter.registry.PubSubRegistry;
+import example.sse.server.adapter.http.sse.registry.PubSubSseRegistry;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @RequestMapping("/sse")
 public class NaiveSseController {
 
-    private final PubSubRegistry<UUID> registry = new PubSubRegistry<>();
+    private final PubSubSseRegistry<UUID> registry = new PubSubSseRegistry<>();
 
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public ResponseEntity<SseEmitter> connect() {

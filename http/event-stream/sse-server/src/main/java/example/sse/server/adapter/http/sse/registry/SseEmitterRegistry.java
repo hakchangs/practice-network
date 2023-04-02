@@ -1,4 +1,4 @@
-package example.sse.server.controller.sse.emitter.registry;
+package example.sse.server.adapter.http.sse.registry;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 

@@ -1,4 +1,4 @@
-package example.sse.server.controller.sse.emitter.registry;
+package example.sse.server.adapter.http.sse.registry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

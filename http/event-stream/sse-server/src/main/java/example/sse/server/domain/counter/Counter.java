@@ -1,16 +1,16 @@
-package example.sse.server.service;
+package example.sse.server.domain.counter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-@Service
-public class CountService {
+@Component
+public class Counter {
 
-    private final Logger log = LoggerFactory.getLogger(CountService.class);
+    private final Logger log = LoggerFactory.getLogger(Counter.class);
 
     public Future<?> count(final int size, final long speed, Consumer<Integer> consumer) {
 

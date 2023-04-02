@@ -1,9 +1,12 @@
-package example.sse.server.controller;
+package example.sse.server.adapter.http;
 
-import example.sse.server.controller.sse.emitter.registry.OneToOneRegistry;
-import example.sse.server.service.CountService;
+import example.sse.server.adapter.http.sse.registry.OneToOneSseRegistry;
+import example.sse.server.domain.counter.Counter;
+import example.sse.server.adapter.http.dto.CountEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -14,20 +17,22 @@ import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/counter")
-public class CounterSseController {
+public class CounterController {
 
-    private final Logger log = LoggerFactory.getLogger(CounterSseController.class);
+    private final Logger log = LoggerFactory.getLogger(CounterController.class);
 
-    private final OneToOneRegistry<String> registry;
-    private final CountService countService;
+    private final OneToOneSseRegistry<String> registry;
+    private final Counter counter;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public CounterSseController(CountService countService) {
-        this.registry = new OneToOneRegistry<>();
-        this.countService = countService;
+    public CounterController(Counter counter, ApplicationEventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
+        this.registry = new OneToOneSseRegistry<>();
+        this.counter = counter;
     }
 
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    SseEmitter add() {
+    SseEmitter connect() {
 
         //1. id 생성
         final String id = generateId();
@@ -47,11 +52,20 @@ public class CounterSseController {
     void count(@RequestParam String id,
                @RequestParam(defaultValue = "10") Integer size,
                @RequestParam(defaultValue = "100") Long speed) {
-
         final SseEmitter emitter = registry.get(id);
+        eventPublisher.publishEvent(new CountEvent(this, emitter, id, size, speed));
+    }
+
+    @EventListener(CountEvent.class)
+    public void onCount(CountEvent event) {
+
+        final SseEmitter emitter = event.getEmitter();
+        final String id = event.getId();
+        final int size = event.getSize();
+        final long speed = event.getSpeed();
 
         //1. count and send
-        Future<?> future = countService.count(size, speed, count -> {
+        Future<?> future = counter.count(size, speed, count -> {
             send(emitter, SseEmitter.event()
                     .id(id).name("count").data(count));
         });
